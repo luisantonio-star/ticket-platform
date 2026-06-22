@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Ticket, ScanLine, FileText, Users, Images, IdCard } from 'lucide-react'
+import { LayoutDashboard, Ticket, ScanLine, FileText, Users, Images, IdCard, Mic } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 const navItems: { href: string; label: string; icon: LucideIcon }[] = [
   { href: '/dashboard/organizador', label: 'Inicio', icon: LayoutDashboard },
   { href: '/dashboard/organizador/eventos', label: 'Evento', icon: Ticket },
+  { href: '/dashboard/organizador/lineup', label: 'Lineup', icon: Mic },
   { href: '/dashboard/organizador/facturacion', label: 'Facturación', icon: FileText },
   { href: '/dashboard/organizador/acreditaciones', label: 'Acreditaciones', icon: IdCard },
   { href: '/dashboard/organizador/eventos-pasados', label: 'Eventos anteriores', icon: Images },

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Countdown from '@/components/Countdown'
-import LineupCards from '@/components/LineupCards'
+import Lineup from '@/components/Lineup'
 import AdminAcceso from '@/components/AdminAcceso'
 import EventosPasados from '@/components/EventosPasados'
 
@@ -98,7 +98,7 @@ export default function HomePage() {
       <Countdown />
 
       {/* LINEUP */}
-      <LineupCards />
+      <Lineup />
 
       {/* PROYECTO SORPRESA */}
       <section style={{ background: '#080808', padding: '90px 24px', textAlign: 'center' }}>
