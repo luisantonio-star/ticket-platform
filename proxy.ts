@@ -31,33 +31,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Si ya está autenticado e intenta ir a login/registro → redirigir al dashboard
-  if (user && (pathname === '/login' || pathname === '/registro')) {
-    const { data: perfil } = await supabase
-      .from('perfiles')
-      .select('rol')
-      .eq('id', user.id)
-      .single()
-
-    const rol = perfil?.rol ?? 'cliente'
-    return NextResponse.redirect(new URL(`/dashboard/${rol}`, request.url))
-  }
-
-  // Si está en /dashboard (raíz) → redirigir al dashboard del rol
-  if (user && pathname === '/dashboard') {
-    const { data: perfil } = await supabase
-      .from('perfiles')
-      .select('rol')
-      .eq('id', user.id)
-      .single()
-
-    const rol = perfil?.rol ?? 'cliente'
-    return NextResponse.redirect(new URL(`/dashboard/${rol}`, request.url))
+  // App de un solo organizador: si ya inició sesión y va a /login o a la raíz
+  // del dashboard → siempre al panel del organizador.
+  if (user && (pathname === '/login' || pathname === '/dashboard')) {
+    return NextResponse.redirect(new URL('/dashboard/organizador', request.url))
   }
 
   return supabaseResponse
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/registro'],
+  matcher: ['/dashboard/:path*', '/login'],
 }
