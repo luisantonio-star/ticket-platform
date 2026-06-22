@@ -5,10 +5,12 @@ import { QRCodeSVG } from 'qrcode.react'
 export default async function BoletoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  // Acceso público: cualquiera con el enlace del boleto puede ver su QR
+  // Acceso público por enlace: leemos con la clave del servidor (los boletos
+  // ya no son legibles con la clave pública por seguridad de datos).
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
   )
 
   const { data: boleto } = await supabase

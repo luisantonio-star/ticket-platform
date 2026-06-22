@@ -32,10 +32,11 @@ export async function crearOrdenInvitado({
 }> {
   // Cliente con service role para poder escribir sin sesión de usuario
   const { createClient: createAdmin } = await import('@supabase/supabase-js')
-  const supabase = createAdmin(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const adminKey = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!adminKey) return { error: 'Configuración del servidor incompleta (falta SUPABASE_SECRET_KEY)' }
+  const supabase = createAdmin(process.env.NEXT_PUBLIC_SUPABASE_URL!, adminKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
 
   // Idempotencia: si ya existe una orden con este session_id, no dupliques
   const { data: existente } = await supabase

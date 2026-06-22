@@ -5,10 +5,12 @@ import { QRCodeSVG } from 'qrcode.react'
 export default async function AcreditacionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  // Acceso público: quien tenga el enlace puede ver su carnet con QR
+  // Acceso público por enlace: leemos con la clave del servidor (los datos de
+  // acreditaciones no son legibles con la clave pública por seguridad).
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
   )
 
   const { data: acr } = await supabase
