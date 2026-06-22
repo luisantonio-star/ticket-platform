@@ -31,7 +31,8 @@
       "Bash(git push *)",
       "mcp__97ca5670-24d3-4da5-aa63-e766afe6108e__execute_sql",
       "Bash(git commit -q -m 'Seguridad: activar RLS en eventos, tipos_boleto, ordenes y boletos *)",
-      "Bash(git commit -q -m 'Lineup editable por el organizador *)"
+      "Bash(git commit -q -m 'Lineup editable por el organizador *)",
+      "Bash(git commit -q -m 'Lineup: subir foto/logo por ponente \\(recuadro, sirve para personas y empresas\\) *)"
     ]
   }
 }

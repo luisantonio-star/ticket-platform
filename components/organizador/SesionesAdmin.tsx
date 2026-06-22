@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { guardarSesion, eliminarSesion, type SesionInput, type Ponente } from '@/lib/actions/sesiones'
-import { Zap, Users, Star, Clock, Lock, Eye, EyeOff, Plus, X, Pencil, Trash2, GripVertical } from 'lucide-react'
+import { guardarSesion, eliminarSesion, subirImagenPonente, type SesionInput, type Ponente } from '@/lib/actions/sesiones'
+import { Zap, Users, Star, Clock, Lock, Eye, EyeOff, Plus, X, Pencil, Trash2, GripVertical, ImagePlus } from 'lucide-react'
 
 export type Sesion = {
   id: string
@@ -114,18 +114,34 @@ function Modal({ inicial, onClose, onSaved }: { inicial: SesionInput; onClose: (
   const [nuevoPonente, setNuevoPonente] = useState('')
   const [error, setError] = useState('')
   const [guardando, setGuardando] = useState(false)
+  const [subiendo, setSubiendo] = useState<number | null>(null)
 
   const set = <K extends keyof SesionInput>(k: K, v: SesionInput[K]) => setForm((f) => ({ ...f, [k]: v }))
 
   const agregarPonente = () => {
     const n = nuevoPonente.trim()
     if (!n) return
-    set('ponentes', [...form.ponentes, { nombre: n, visible: true }])
+    set('ponentes', [...form.ponentes, { nombre: n, visible: true, imagen: null }])
     setNuevoPonente('')
   }
   const togglePonente = (i: number) =>
     set('ponentes', form.ponentes.map((p, j) => (j === i ? { ...p, visible: !p.visible } : p)))
   const quitarPonente = (i: number) => set('ponentes', form.ponentes.filter((_, j) => j !== i))
+  const setImagenPonente = (i: number, imagen: string | null) =>
+    set('ponentes', form.ponentes.map((p, j) => (j === i ? { ...p, imagen } : p)))
+
+  const subirImagen = async (i: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    setError(''); setSubiendo(i)
+    const fd = new FormData()
+    fd.append('imagen', file)
+    const res = await subirImagenPonente(fd)
+    setSubiendo(null)
+    if (res.error) { setError(res.error); return }
+    if (res.url) setImagenPonente(i, res.url)
+  }
 
   const guardar = async () => {
     setError(''); setGuardando(true)
@@ -217,14 +233,28 @@ function Modal({ inicial, onClose, onSaved }: { inicial: SesionInput; onClose: (
             <button onClick={agregarPonente} style={{ flexShrink: 0, width: 50, borderRadius: 12, border: 'none', background: NARANJA, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Plus size={20} /></button>
           </div>
           {form.ponentes.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
               {form.ponentes.map((p, i) => (
-                <div key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 8, borderRadius: 12, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  {/* Miniatura / subir imagen */}
+                  <label style={{ position: 'relative', width: 42, height: 42, borderRadius: 8, flexShrink: 0, cursor: 'pointer', background: p.imagen ? '#fff' : 'rgba(255,255,255,0.08)', border: '1px dashed rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => subirImagen(i, e)} />
+                    {subiendo === i ? (
+                      <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)' }}>…</span>
+                    ) : p.imagen ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.imagen} alt={p.nombre} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    ) : (
+                      <ImagePlus size={16} color="rgba(255,255,255,0.45)" />
+                    )}
+                  </label>
+
+                  <span style={{ flex: 1, fontSize: 14, fontWeight: 600, color: p.visible ? '#fff' : 'rgba(255,255,255,0.4)' }}>{p.nombre}</span>
+
                   <button onClick={() => togglePonente(i)} title={p.visible ? 'Visible (clic para ocultar)' : 'Oculto (clic para mostrar)'} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: p.visible ? '#5BE3A0' : 'rgba(255,255,255,0.35)' }}>
-                    {p.visible ? <Eye size={15} /> : <EyeOff size={15} />}
+                    {p.visible ? <Eye size={17} /> : <EyeOff size={17} />}
                   </button>
-                  <span style={{ fontSize: 13.5, fontWeight: 600, color: p.visible ? '#fff' : 'rgba(255,255,255,0.4)' }}>{p.nombre}</span>
-                  <button onClick={() => quitarPonente(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center' }}><X size={14} /></button>
+                  <button onClick={() => quitarPonente(i)} title="Quitar" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center' }}><X size={16} /></button>
                 </div>
               ))}
             </div>

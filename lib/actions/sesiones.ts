@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createClient as createServer } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 
-export type Ponente = { nombre: string; visible: boolean }
+export type Ponente = { nombre: string; visible: boolean; imagen?: string | null }
 
 export type SesionInput = {
   id?: string
@@ -44,7 +44,7 @@ async function requireOrganizador() {
 function limpiar(input: SesionInput) {
   const tipo = TIPOS.includes(input.tipo) ? input.tipo : 'conferencia'
   const ponentes = (input.ponentes ?? [])
-    .map((p) => ({ nombre: String(p.nombre ?? '').trim(), visible: p.visible !== false }))
+    .map((p) => ({ nombre: String(p.nombre ?? '').trim(), visible: p.visible !== false, imagen: p.imagen || null }))
     .filter((p) => p.nombre)
   return {
     titulo: String(input.titulo ?? '').trim(),
@@ -81,6 +81,39 @@ export async function guardarSesion(
   revalidatePath('/dashboard/organizador/lineup')
   revalidatePath('/')
   return { ok: true }
+}
+
+export async function subirImagenPonente(
+  formData: FormData
+): Promise<{ url?: string; error?: string }> {
+  const auth = await requireOrganizador()
+  if (auth.error) return { error: auth.error }
+
+  const file = formData.get('imagen') as File | null
+  if (!file || file.size === 0) return { error: 'Selecciona una imagen' }
+  if (file.size > 5 * 1024 * 1024) return { error: 'La imagen no debe pesar más de 5 MB' }
+  if (!file.type.startsWith('image/')) return { error: 'El archivo debe ser una imagen' }
+
+  const admin = adminClient()
+  if (!admin) return { error: 'Falta configurar SUPABASE_SECRET_KEY en el servidor' }
+
+  const BUCKET = 'ponentes'
+  const { data: bucket } = await admin.storage.getBucket(BUCKET)
+  if (!bucket) {
+    await admin.storage.createBucket(BUCKET, {
+      public: true,
+      fileSizeLimit: 5 * 1024 * 1024,
+      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg+xml'],
+    })
+  }
+
+  const ext = (file.name.split('.').pop() || 'png').toLowerCase()
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
+  const { error } = await admin.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+  if (error) return { error: 'No se pudo subir la imagen. Intenta de nuevo.' }
+
+  const { data: pub } = admin.storage.from(BUCKET).getPublicUrl(path)
+  return { url: pub.publicUrl }
 }
 
 export async function eliminarSesion(id: string): Promise<{ ok?: boolean; error?: string }> {

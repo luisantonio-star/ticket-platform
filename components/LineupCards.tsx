@@ -9,7 +9,7 @@ export type SesionPublica = {
   etiqueta: string | null
   horario: string | null
   tipo: string
-  ponentes: { nombre: string; visible: boolean }[]
+  ponentes: { nombre: string; visible: boolean; imagen?: string | null }[]
   highlight: boolean
 }
 
@@ -130,9 +130,16 @@ export default function LineupCards({ sesiones }: { sesiones: SesionPublica[] })
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 'auto' }}>
                         {visibles.map((p, i) => (
                           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#E85D20', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: '#fff', flexShrink: 0 }}>
-                              {p.nombre.charAt(0).toUpperCase()}
-                            </div>
+                            {p.imagen ? (
+                              <div style={{ width: 30, height: 30, borderRadius: 7, background: '#fff', flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={p.imagen} alt={p.nombre} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                              </div>
+                            ) : (
+                              <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#E85D20', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: '#fff', flexShrink: 0 }}>
+                                {p.nombre.charAt(0).toUpperCase()}
+                              </div>
+                            )}
                             <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{p.nombre}</div>
                           </div>
                         ))}
