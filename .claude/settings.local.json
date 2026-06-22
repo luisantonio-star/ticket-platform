@@ -22,7 +22,13 @@
       "Bash(grep -o 'SUPABASE_SERVICE_ROLE_KEY=.\\\\{0,12\\\\}' .env.local)",
       "Bash(grep -oE 'SUPABASE_SERVICE_ROLE_KEY=.{0,10}' .env.local)",
       "Bash(echo \"=== SKILL.md en todo el perfil de usuario ===\"; find \"C:/Users/firio\" -iname \"SKILL.md\" 2>/dev/null | head -30; echo; echo \"=== Carpetas llamadas skills ===\"; find \"C:/Users/firio/.claude\" \"C:/Users/firio/Documents\" -type d -iname \"skills\" 2>/dev/null | head)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "mcp__97ca5670-24d3-4da5-aa63-e766afe6108e__list_projects",
+      "mcp__97ca5670-24d3-4da5-aa63-e766afe6108e__apply_migration",
+      "mcp__97ca5670-24d3-4da5-aa63-e766afe6108e__list_tables",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Agregar acreditaciones \\(patrocinadores y medios\\) con carnet QR *)",
+      "Bash(git push *)"
     ]
   }
 }
