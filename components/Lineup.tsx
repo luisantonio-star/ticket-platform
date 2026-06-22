@@ -9,7 +9,7 @@ export default async function Lineup() {
 
   const { data } = await supabase
     .from('sesiones')
-    .select('id, titulo, subtitulo, etiqueta, horario, tipo, ponentes, highlight')
+    .select('id, titulo, subtitulo, etiqueta, horario, tipo, imagen, ponentes, highlight')
     .eq('publica', true)
     .order('orden', { ascending: true })
     .order('created_at', { ascending: true })

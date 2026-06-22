@@ -9,6 +9,7 @@ export type SesionPublica = {
   etiqueta: string | null
   horario: string | null
   tipo: string
+  imagen: string | null
   ponentes: { nombre: string; visible: boolean; imagen?: string | null }[]
   highlight: boolean
 }
@@ -84,7 +85,15 @@ export default function LineupCards({ sesiones }: { sesiones: SesionPublica[] })
                     boxShadow: s.highlight ? '0 0 28px rgba(232,93,32,0.45)' : 'none',
                     display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
                   }}>
-                    <div style={{ padding: '14px 14px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    {/* Imagen de portada (si hay) + degradado para legibilidad */}
+                    {s.imagen && (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={s.imagen} alt={s.titulo} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.10) 38%, rgba(0,0,0,0.88) 100%)' }} />
+                      </>
+                    )}
+                    <div style={{ padding: '14px 14px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
                       <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.7)', background: 'rgba(0,0,0,0.3)', padding: '3px 8px', borderRadius: 4, textTransform: 'uppercase' }}>
                         {meta.label}
                       </span>

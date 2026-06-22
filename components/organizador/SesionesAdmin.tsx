@@ -12,6 +12,7 @@ export type Sesion = {
   etiqueta: string | null
   horario: string | null
   tipo: string
+  imagen: string | null
   ponentes: Ponente[]
   publica: boolean
   highlight: boolean
@@ -28,7 +29,7 @@ const TIPOS = [
 const NARANJA = '#E85D20'
 
 function vacia(): SesionInput {
-  return { titulo: '', subtitulo: '', etiqueta: '', horario: '', tipo: 'conferencia', ponentes: [], publica: true, highlight: false }
+  return { titulo: '', subtitulo: '', etiqueta: '', horario: '', tipo: 'conferencia', imagen: null, ponentes: [], publica: true, highlight: false }
 }
 
 export default function SesionesAdmin({ sesiones }: { sesiones: Sesion[] }) {
@@ -39,7 +40,7 @@ export default function SesionesAdmin({ sesiones }: { sesiones: Sesion[] }) {
   const abrirEditar = (s: Sesion) =>
     setEditando({
       id: s.id, titulo: s.titulo, subtitulo: s.subtitulo ?? '', etiqueta: s.etiqueta ?? '',
-      horario: s.horario ?? '', tipo: s.tipo, ponentes: s.ponentes ?? [], publica: s.publica, highlight: s.highlight,
+      horario: s.horario ?? '', tipo: s.tipo, imagen: s.imagen ?? null, ponentes: s.ponentes ?? [], publica: s.publica, highlight: s.highlight,
     })
 
   const borrar = async (id: string) => {
@@ -115,6 +116,7 @@ function Modal({ inicial, onClose, onSaved }: { inicial: SesionInput; onClose: (
   const [error, setError] = useState('')
   const [guardando, setGuardando] = useState(false)
   const [subiendo, setSubiendo] = useState<number | null>(null)
+  const [subiendoPortada, setSubiendoPortada] = useState(false)
 
   const set = <K extends keyof SesionInput>(k: K, v: SesionInput[K]) => setForm((f) => ({ ...f, [k]: v }))
 
@@ -141,6 +143,19 @@ function Modal({ inicial, onClose, onSaved }: { inicial: SesionInput; onClose: (
     setSubiendo(null)
     if (res.error) { setError(res.error); return }
     if (res.url) setImagenPonente(i, res.url)
+  }
+
+  const subirPortada = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    setError(''); setSubiendoPortada(true)
+    const fd = new FormData()
+    fd.append('imagen', file)
+    const res = await subirImagenPonente(fd)
+    setSubiendoPortada(false)
+    if (res.error) { setError(res.error); return }
+    if (res.url) set('imagen', res.url)
   }
 
   const guardar = async () => {
@@ -179,6 +194,30 @@ function Modal({ inicial, onClose, onSaved }: { inicial: SesionInput; onClose: (
         </div>
 
         <div style={{ padding: '24px 28px 28px' }}>
+          {/* Portada */}
+          <label style={labelStyle}>Imagen de portada</label>
+          <label style={{ position: 'relative', display: 'block', width: '100%', aspectRatio: '3 / 1', borderRadius: 12, overflow: 'hidden', cursor: 'pointer', marginBottom: 20, background: form.imagen ? '#000' : 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)' }}>
+            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={subirPortada} />
+            {subiendoPortada ? (
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>Subiendo…</div>
+            ) : form.imagen ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={form.imagen} alt="Portada" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <button
+                  onClick={(e) => { e.preventDefault(); set('imagen', null) }}
+                  style={{ position: 'absolute', top: 8, right: 8, width: 30, height: 30, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="Quitar imagen"
+                ><X size={16} /></button>
+              </>
+            ) : (
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, color: 'rgba(255,255,255,0.45)' }}>
+                <ImagePlus size={26} />
+                <span style={{ fontSize: 12.5, fontWeight: 600 }}>Subir imagen de portada</span>
+              </div>
+            )}
+          </label>
+
           {/* Título + Subtítulo */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 18 }}>
             <div>

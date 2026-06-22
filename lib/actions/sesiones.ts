@@ -13,6 +13,7 @@ export type SesionInput = {
   etiqueta: string
   horario: string
   tipo: string
+  imagen: string | null
   ponentes: Ponente[]
   publica: boolean
   highlight: boolean
@@ -52,6 +53,7 @@ function limpiar(input: SesionInput) {
     etiqueta: String(input.etiqueta ?? '').trim() || null,
     horario: String(input.horario ?? '').trim() || null,
     tipo,
+    imagen: input.imagen || null,
     ponentes,
     publica: input.publica !== false,
     highlight: input.highlight === true,
