@@ -34,7 +34,8 @@
       "Bash(git commit -q -m 'Lineup editable por el organizador *)",
       "Bash(git commit -q -m 'Lineup: subir foto/logo por ponente \\(recuadro, sirve para personas y empresas\\) *)",
       "Bash(npm install *)",
-      "Bash(timeout 25 node monitor.js)"
+      "Bash(timeout 25 node monitor.js)",
+      "Bash(git commit -q -m 'Patrocinadores editables desde el dashboard *)"
     ]
   }
 }

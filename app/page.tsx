@@ -3,6 +3,7 @@ import Countdown from '@/components/Countdown'
 import Lineup from '@/components/Lineup'
 import AdminAcceso from '@/components/AdminAcceso'
 import EventosPasados from '@/components/EventosPasados'
+import Patrocinadores from '@/components/Patrocinadores'
 
 export default function HomePage() {
   return (
@@ -176,87 +177,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PATROCINADORES */}
-      <section style={{ background: 'linear-gradient(180deg, #0d0a1f 0%, #0a0a14 100%)', padding: '70px 0 80px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 48, padding: '0 24px' }}>
-          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 'clamp(32px, 6vw, 60px)', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: '0 0 4px' }}>
-            <span style={{ color: '#fff' }}>NUESTROS</span><br />
-            <span style={{ color: '#E85D20' }}>PATROCINADORES</span>
-          </h2>
-          <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.35)', margin: '12px 0 0', textTransform: 'uppercase' }}>
-            EMPRESAS CON VISIÓN DE FUTURO
-          </p>
-        </div>
-
-        {/* Fila 1 */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', color: '#E85D20', background: 'rgba(232,93,32,0.12)', border: '1px solid rgba(232,93,32,0.3)', padding: '4px 14px', borderRadius: 4 }}>
-              PAQUETE PRINCIPAL
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden', position: 'relative' }}>
-            <div style={{ display: 'flex', gap: 60, alignItems: 'center', padding: '20px 40px', animation: 'scroll-left 18s linear infinite', width: 'max-content' }}>
-              {[...Array(8)].map((_, i) => (
-                <div key={i} style={{ width: 140, height: 52, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.2)' }}>LOGO</span>
-                </div>
-              ))}
-              {[...Array(8)].map((_, i) => (
-                <div key={`dup-${i}`} style={{ width: 140, height: 52, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.2)' }}>LOGO</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Fila 2 */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 14px', borderRadius: 4 }}>
-              PATROCINADORES
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ display: 'flex', gap: 50, alignItems: 'center', padding: '16px 40px', animation: 'scroll-right 22s linear infinite', width: 'max-content' }}>
-              {[...Array(10)].map((_, i) => (
-                <div key={i} style={{ width: 120, height: 44, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.15)' }}>LOGO</span>
-                </div>
-              ))}
-              {[...Array(10)].map((_, i) => (
-                <div key={`dup-${i}`} style={{ width: 120, height: 44, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.15)' }}>LOGO</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Fila 3 - Medios */}
-        <div>
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 14px', borderRadius: 4 }}>
-              MEDIOS DE COMUNICACIÓN
-            </span>
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ display: 'flex', gap: 50, alignItems: 'center', padding: '16px 40px', animation: 'scroll-left 20s linear infinite', width: 'max-content' }}>
-              {[...Array(9)].map((_, i) => (
-                <div key={i} style={{ width: 110, height: 40, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.15)' }}>LOGO</span>
-                </div>
-              ))}
-              {[...Array(9)].map((_, i) => (
-                <div key={`dup-${i}`} style={{ width: 110, height: 40, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.15)' }}>LOGO</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* PATROCINADORES (editable desde el dashboard) */}
+      <Patrocinadores />
 
       {/* GUÍA DE VIAJE */}
       <section style={{ background: '#0a0a0a', padding: '60px clamp(20px, 5vw, 40px)' }}>
