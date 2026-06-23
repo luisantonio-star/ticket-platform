@@ -84,10 +84,17 @@ async function validarAcreditacion(clean: string): Promise<ScanResult> {
 
   await admin.from('acreditaciones').update({ estado: 'usado' }).eq('id', acr.id)
 
+  const etiquetas: Record<string, string> = {
+    patrocinador: 'Patrocinador',
+    medio: 'Medio de comunicación',
+    general: 'General',
+    cortesia: 'Cortesía',
+  }
+
   return {
     ok: true,
     evento: 'Acreditación',
-    tipo: acr.tipo_carnet === 'patrocinador' ? 'Patrocinador' : 'Medio de comunicación',
+    tipo: etiquetas[acr.tipo_carnet] ?? 'Acreditación',
     titular: acr.nombre,
     codigo: clean,
   }

@@ -21,18 +21,24 @@ export default async function AcreditacionPage({ params }: { params: Promise<{ i
 
   if (!acr) notFound()
 
-  const esPatrocinador = acr.tipo_carnet === 'patrocinador'
-  const etiqueta = esPatrocinador ? 'Patrocinador' : 'Medio de comunicación'
+  const CARNET: Record<string, { etiqueta: string; acento: string; acentoDark: string }> = {
+    patrocinador: { etiqueta: 'Patrocinador', acento: '#E85D20', acentoDark: '#c04515' },
+    medio: { etiqueta: 'Medio de comunicación', acento: '#3B82F6', acentoDark: '#1d4ed8' },
+    general: { etiqueta: 'General', acento: '#16B458', acentoDark: '#0f7a3c' },
+    cortesia: { etiqueta: 'Cortesía', acento: '#A855F7', acentoDark: '#7e22ce' },
+  }
+  const carnet = CARNET[acr.tipo_carnet] ?? CARNET.general
+  const etiqueta = carnet.etiqueta
+  const acento = carnet.acento
   const activo = acr.estado === 'activo'
   const estadoColor = activo ? '#22c55e' : acr.estado === 'usado' ? 'rgba(255,255,255,0.4)' : '#ef4444'
-  const acento = esPatrocinador ? '#E85D20' : '#3B82F6'
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #0d0a1f 0%, #12102a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: "'Instrument Sans', system-ui, sans-serif", color: '#fff' }}>
       <div style={{ width: '100%', maxWidth: 380, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden', backdropFilter: 'blur(12px)' }}>
 
         {/* Header */}
-        <div style={{ background: `linear-gradient(135deg, ${acento} 0%, ${esPatrocinador ? '#c04515' : '#1d4ed8'} 100%)`, padding: '22px 24px', color: '#fff' }}>
+        <div style={{ background: `linear-gradient(135deg, ${acento} 0%, ${carnet.acentoDark} 100%)`, padding: '22px 24px', color: '#fff' }}>
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.85, margin: '0 0 4px' }}>Carnet de acceso</p>
           <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, lineHeight: 1.1, margin: 0, textTransform: 'uppercase' }}>{etiqueta}</h1>
           <p style={{ fontSize: 13, opacity: 0.9, margin: '6px 0 0' }}>{acr.nombre}</p>

@@ -45,7 +45,7 @@ export async function crearAcreditacion(
   const tipoCarnet = String(formData.get('tipo_carnet') ?? '')
 
   if (!nombre || !correo) return { error: 'Nombre y correo son obligatorios' }
-  if (tipoCarnet !== 'patrocinador' && tipoCarnet !== 'medio') {
+  if (!['patrocinador', 'medio', 'general', 'cortesia'].includes(tipoCarnet)) {
     return { error: 'Selecciona el tipo de carnet' }
   }
 

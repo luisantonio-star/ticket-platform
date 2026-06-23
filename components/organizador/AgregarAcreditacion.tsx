@@ -42,6 +42,8 @@ export default function AgregarAcreditacion() {
             <option value="" disabled style={{ color: '#15181F' }}>Selecciona…</option>
             <option value="patrocinador" style={{ color: '#15181F' }}>Patrocinador</option>
             <option value="medio" style={{ color: '#15181F' }}>Medio de comunicación</option>
+            <option value="general" style={{ color: '#15181F' }}>General</option>
+            <option value="cortesia" style={{ color: '#15181F' }}>Cortesía</option>
           </select>
         </div>
 

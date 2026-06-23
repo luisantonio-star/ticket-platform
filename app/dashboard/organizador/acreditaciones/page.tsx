@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import AgregarAcreditacion from '@/components/organizador/AgregarAcreditacion'
 import { eliminarAcreditacion } from '@/lib/actions/acreditaciones'
-import { Trash2, QrCode, Handshake, Radio } from 'lucide-react'
+import { Trash2, QrCode, Handshake, Radio, Ticket, Gift } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -24,8 +24,12 @@ export default async function AcreditacionesPage() {
     .order('created_at', { ascending: false })
 
   const lista = (data ?? []) as Acreditacion[]
-  const patrocinadores = lista.filter((a) => a.tipo_carnet === 'patrocinador')
-  const medios = lista.filter((a) => a.tipo_carnet === 'medio')
+  const grupos = [
+    { tipo: 'patrocinador', titulo: 'Patrocinadores', icono: <Handshake size={18} className="text-primary" /> },
+    { tipo: 'medio', titulo: 'Medios de comunicación', icono: <Radio size={18} className="text-primary" /> },
+    { tipo: 'general', titulo: 'General', icono: <Ticket size={18} className="text-primary" /> },
+    { tipo: 'cortesia', titulo: 'Cortesía', icono: <Gift size={18} className="text-primary" /> },
+  ]
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -33,7 +37,7 @@ export default async function AcreditacionesPage() {
         <span className="text-sm font-semibold text-primary">Control de acceso</span>
         <h1 className="text-3xl font-bold tracking-tight mt-1">Acreditaciones</h1>
         <p className="text-foreground/55 mt-1.5">
-          Registra patrocinadores y medios de comunicación. Cada uno recibe un carnet con QR para entrar.
+          Registra patrocinadores, medios, general y cortesías. Cada uno recibe un carnet con QR para entrar.
         </p>
       </div>
 
@@ -41,9 +45,12 @@ export default async function AcreditacionesPage() {
         <AgregarAcreditacion />
       </div>
 
-      <Seccion titulo="Patrocinadores" icono={<Handshake size={18} className="text-primary" />} lista={patrocinadores} />
-      <div className="h-8" />
-      <Seccion titulo="Medios de comunicación" icono={<Radio size={18} className="text-primary" />} lista={medios} />
+      {grupos.map((g, i) => (
+        <div key={g.tipo}>
+          {i > 0 && <div className="h-8" />}
+          <Seccion titulo={g.titulo} icono={g.icono} lista={lista.filter((a) => a.tipo_carnet === g.tipo)} />
+        </div>
+      ))}
     </div>
   )
 }
