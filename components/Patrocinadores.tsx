@@ -23,12 +23,13 @@ export default async function Patrocinadores() {
   if (lista.length === 0) return null
 
   const filas = [
-    { label: 'Paquete principal', destacado: true, items: lista.filter((p) => p.paquete === 'expansion') },
-    { label: 'Patrocinadores', destacado: false, items: lista.filter((p) => p.paquete === 'sonora' || p.paquete === 'compa') },
-    { label: 'Medios de comunicación', destacado: false, items: lista.filter((p) => p.paquete === 'medios') },
+    { label: 'Paquete Expansión', color: '#E85D20', items: lista.filter((p) => p.paquete === 'expansion') },
+    { label: 'Paquete Compa', color: '#E85D20', items: lista.filter((p) => p.paquete === 'compa') },
+    { label: 'Patrocinadores Sonora', color: '#E85D20', items: lista.filter((p) => p.paquete === 'sonora') },
+    { label: 'Medios de comunicación', color: '#2DD4BF', items: lista.filter((p) => p.paquete === 'medios') },
   ].filter((f) => f.items.length > 0)
 
-  const anims = ['scroll-left 22s linear infinite', 'scroll-right 26s linear infinite', 'scroll-left 24s linear infinite']
+  const anims = ['scroll-left 22s linear infinite', 'scroll-right 26s linear infinite', 'scroll-left 24s linear infinite', 'scroll-right 28s linear infinite']
 
   return (
     <section style={{ background: 'linear-gradient(180deg, #0d0a1f 0%, #0a0a14 100%)', padding: '70px 0 80px' }}>
@@ -46,9 +47,9 @@ export default async function Patrocinadores() {
         <div key={fila.label} style={{ marginBottom: idx < filas.length - 1 ? 32 : 0 }}>
           <div style={{ textAlign: 'center', marginBottom: 16 }}>
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
-              color: fila.destacado ? '#E85D20' : 'rgba(255,255,255,0.4)',
-              background: fila.destacado ? 'rgba(232,93,32,0.12)' : 'rgba(255,255,255,0.06)',
-              border: `1px solid ${fila.destacado ? 'rgba(232,93,32,0.3)' : 'rgba(255,255,255,0.1)'}`,
+              color: fila.color,
+              background: `${fila.color}1f`,
+              border: `1px solid ${fila.color}4d`,
               padding: '4px 14px', borderRadius: 4 }}>
               {fila.label}
             </span>
